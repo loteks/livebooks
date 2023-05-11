@@ -1,0 +1,222 @@
+# Modules & Structs
+
+## Modules
+
+A module can contain variables, functions, and other types of data. Using modules makes it easier to organize and manage code. Modules are defined using the 'defmodule' keyword.
+
+```elixir
+# Example of a module with one function
+# Function is accessed using dot notation
+
+defmodule Math do
+  def add(a, b) do
+    a + b
+  end
+end
+
+IO.puts(Math.add(1, 2))
+```
+
+Functions defined using the 'def' keyword can be used anywhere in the code base whereas functions defined using the 'defp' keyword are private and only available within the module.
+
+```elixir
+# Example showing that a private function
+# cannot be accessed outside of the module
+
+defmodule Math2 do
+  def add(a, b) do
+    a + b
+  end
+
+  defp multiply(a, b) do
+    a * b
+  end
+end
+
+# will fail as "undefined"
+IO.puts(Math2.multiply(2, 2))
+```
+
+```elixir
+# Example using a private function inside of a module
+
+defmodule Math3 do
+  def double_product(a, b) do
+    2 * multiply(a, b)
+  end
+
+  defp multiply(a, b) do
+    a * b
+  end
+end
+
+IO.puts(Math3.double_product(2, 2))
+```
+
+Modules are documented using @moduledoc and functions in the module are documented using @doc
+
+```elixir
+# Example showing module documentation using @moduledoc and @doc
+
+defmodule Math4 do
+  @moduledoc """
+  Math4
+  Module implements math functions
+  """
+
+  @doc """
+  function adds 2 numbers
+  """
+  def add(a, b) do
+    a + b
+  end
+end
+```
+
+By starting a line with iex> in the documentation, we declare that the code example should be executable. We can use this to run doctests. The next line after the iex> function call is the expected return value.
+
+```elixir
+defmodule DocTest do
+  @moduledoc """
+  DocTest
+
+  shows doctest examples
+  """
+
+  @doc """
+  Returns a personalized greeting
+
+  ## Examples
+
+    iex> DocTest.hello("Bob")
+    "Hello Bob!"
+
+    iex> DocTest.hello("Alice")
+    "Hello Alice!"
+  """
+  def hello(name \\ "Mallory") do
+    "Hello #{name}!"
+  end
+end
+```
+
+Modules provide a namespace and can have submodules within that namespace.
+
+```elixir
+# Example of a submodule namespace
+
+defmodule Math4.Multiply do
+  def multiply(a, b) do
+    a * b
+  end
+end
+
+IO.puts(Math4.Multiply.multiply(2, 2))
+```
+
+We use the @ symbol to define a compile-time module attribute. We can use module attributes to avoid code repetition where many functions use the same value.
+
+```elixir
+# Example using module attributes
+
+defmodule Name do
+  @name "Alice"
+  @language "elixir"
+
+  def introduce do
+    "Hello, my name is #{@name} and I ❤️ #{@language}!"
+  end
+end
+
+Name.introduce()
+```
+
+## Structs
+
+Structs are data structures that allow us to define custom data types with named fields. Structs make it easier to work with complex data by providing a way to define and access fields by name instead of position. Structs are similar to maps but they are more structured and enforce a specific schema.
+
+Structs are defined using the defstruct keyword followed by a list of field names. The name of the struct is the name of the module.
+
+```elixir
+# Example of a struct definition with default values
+
+defmodule Person do
+  defstruct name: "", age: 0, height: 0.0
+  # alternate syntax
+  # defstruct [:name, :age, :height]
+end
+```
+
+```elixir
+# Creating an instance of the Person struct
+
+person = %Person{name: "Alice", age: 30, height: 5.5}
+```
+
+```elixir
+# Accessing a value in the instance using dot notation
+
+IO.puts(person.name)
+```
+
+```elixir
+# Updating a value in the instance
+
+person = %{person | age: 31}
+IO.puts(person.age)
+```
+
+## Advanced Structs
+
+Elixir's Stream module handles operations lazily by storing them in a struct. See demonstration by German Velasco at https://youtu.be/wYoiUa4HgG4
+
+```elixir
+# An example implementing lazy evaluation using a struct.
+# The struct is used to store each operation and value in a list.
+# The value is not computed until the evaluate function is called.
+
+defmodule LazyMath do
+  defstruct initial: 0, ops: []
+
+  def new(initial), do: %LazyMath{initial: initial}
+
+  def add(math = %{ops: ops}, number) do
+    %LazyMath{math | ops: [{:add, number} | ops]}
+  end
+
+  def subtract(math = %{ops: ops}, number) do
+    %LazyMath{math | ops: [{:sub, number} | ops]}
+  end
+
+  def multiply(math = %{ops: ops}, number) do
+    %LazyMath{math | ops: [{:mult, number} | ops]}
+  end
+
+  def divide(math = %{ops: ops}, number) do
+    %LazyMath{math | ops: [{:div, number} | ops]}
+  end
+
+  def evaluate(%LazyMath{initial: init, ops: ops}) do
+    ops
+    |> Enum.reverse()
+    |> Enum.reduce(init, fn
+      {:add, number}, acc_total -> acc_total + number
+      {:sub, number}, acc_total -> acc_total - number
+      {:mult, number}, acc_total -> acc_total * number
+      {:div, number}, acc_total -> acc_total / number
+    end)
+  end
+end
+```
+
+```elixir
+# IO.inspect shows the struct contents before evaluation
+
+LazyMath.new(0)
+|> LazyMath.add(5)
+|> LazyMath.subtract(2)
+|> LazyMath.multiply(2)
+|> LazyMath.divide(3)
+|> IO.inspect()
+|> LazyMath.evaluate()
+```

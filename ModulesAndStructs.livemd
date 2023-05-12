@@ -166,12 +166,12 @@ person = %{person | age: 31}
 IO.puts(person.age)
 ```
 
-## Advanced Structs
+## Application
 
 Elixir's Stream module handles operations lazily by storing them in a struct. See demonstration by German Velasco at https://youtu.be/wYoiUa4HgG4
 
 ```elixir
-# An example implementing lazy evaluation using a struct.
+# An example module implementing lazy evaluation using a struct.
 # The struct is used to store each operation and value in a list.
 # The value is not computed until the evaluate function is called.
 

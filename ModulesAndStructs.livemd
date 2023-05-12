@@ -2,7 +2,7 @@
 
 ## Modules
 
-A module can contain variables, functions, and other types of data. Using modules makes it easier to organize and manage code. Modules are defined using the 'defmodule' keyword.
+Modules serve to organize and manage code. A module can contain variables, functions, and other types of data. Modules are defined using the 'defmodule' keyword.
 
 ```elixir
 # Example of a module with one function
@@ -53,7 +53,7 @@ end
 IO.puts(Math3.double_product(2, 2))
 ```
 
-Modules are documented using @moduledoc and functions in the module are documented using @doc
+Modules are documented using the @moduledoc module attribute. Functions within the module are documented using the @doc module attribute.
 
 ```elixir
 # Example showing module documentation using @moduledoc and @doc
@@ -73,7 +73,7 @@ defmodule Math4 do
 end
 ```
 
-By starting a line with iex> in the documentation, we declare that the code example should be executable. We can use this to run doctests. The next line after the iex> function call is the expected return value.
+By starting a line with iex> in the documentation, we declare that the code example should be executable. This can be used to run doctests where the next line after the iex> function call is the expected return value of the test.
 
 ```elixir
 defmodule DocTest do
@@ -114,7 +114,7 @@ end
 IO.puts(Math4.Multiply.multiply(2, 2))
 ```
 
-We use the @ symbol to define a compile-time module attribute. We can use module attributes to avoid code repetition where many functions use the same value.
+We use the @ symbol to define a compile-time module attribute. Module attributes can help avoid code repetition where many functions use the same value.
 
 ```elixir
 # Example using module attributes
@@ -133,7 +133,7 @@ Name.introduce()
 
 ## Structs
 
-Structs are data structures that allow us to define custom data types with named fields. Structs make it easier to work with complex data by providing a way to define and access fields by name instead of position. Structs are similar to maps but they are more structured and enforce a specific schema.
+Structs are data structures that allow us to define custom data types with named fields. Structs provide a way to define and access fields by name instead of position which can be helpful when working with complex data. Structs are similar to maps but they are more structured and enforce a specific schema.
 
 Structs are defined using the defstruct keyword followed by a list of field names. The name of the struct is the name of the module.
 
@@ -168,7 +168,7 @@ IO.puts(person.age)
 
 ## Application
 
-Elixir's Stream module handles operations lazily by storing them in a struct. See demonstration by German Velasco at https://youtu.be/wYoiUa4HgG4
+Elixir's Stream module handles operations lazily by storing them in a struct. See original post by German Velasco at https://www.germanvelasco.com/blog/build-your-own-lazy-operation-evaluator-in-elixir for more detail.
 
 ```elixir
 # An example module implementing lazy evaluation using a struct.
